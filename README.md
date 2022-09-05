@@ -1,15 +1,15 @@
-# remote_control_server
+# remote_control_client
 
 #### 介绍
-配合remote_control_client和remote_control_ui使用
+采用rust语言编写的客户端程序
+
 #### 使用说明
- **需要java环境** 
+1.安装rust开发环境->https://www.rust-lang.org/zh-CN/learn/get-started
+2.拉取项目通过cargo build --release编译项目获得可执行文件
 
-1.使用开发工具idea直接编译jar包
+#### 其他
+项目中摄像头拍照仅win可用，且和计划任务第三方库组合存在bug，暂时注释拍照相关代码。
 
-2.java -jar xxx.jar启动
-
-邮件通知配置在src/main/java/com/remotecontrol/star/config/EmailConfig.java中
-取消邮件通知注释代码在src/main/java/com/remotecontrol/star/util/ClientJsonParse.java文件37行
+可执行文件图标替换icon.ico即可
 
 其他问题可关注公众号“独语小栈”交流
