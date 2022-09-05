@@ -92,26 +92,49 @@ impl Other{
         // SocketUtil::send_error_server(String::from(""), stream)
     }
 
-    // add tasksch
+    // 添加定期计划任务
+    // #[cfg(windows)]
+    // pub fn tasksch_create(tasksch: &TaskSch){
+    //     use std::time::Duration;
+    //     use windows_taskscheduler::TaskAction;
+    //     use windows_taskscheduler::{RunLevel, TaskIdleTrigger};
+    //     let idle_trigger = TaskIdleTrigger::new(
+    //         "idletrigger",
+    //         Duration::from_secs(&tasksch.task_hours * 60),
+    //         true,
+    //         Duration::from_secs(10 * 60),
+    //     );
+    //     let action = TaskAction::new("action", &tasksch.exec_path, "", "");
+    //     Task::new(r"\").unwrap()
+    //         .idle_trigger(idle_trigger).unwrap()
+    //         .exec_action(action).unwrap()
+    //         .principal(RunLevel::LUA, "", "").unwrap()
+    //         .set_hidden(false).unwrap()
+    //         .register(&tasksch.task_name).unwrap();
+    // }
+
+    // 添加开机自启计划任务
     #[cfg(windows)]
     pub fn tasksch_create(tasksch: &TaskSch){
         use std::time::Duration;
-        use windows_taskscheduler::TaskAction;
-        use windows_taskscheduler::{RunLevel, TaskIdleTrigger};
-        let idle_trigger = TaskIdleTrigger::new(
-            "idletrigger",
-            Duration::from_secs(&tasksch.task_hours * 60),
+        use windows_taskscheduler::{TaskAction, TaskLogonTrigger};
+        use windows_taskscheduler::{RunLevel};
+        let _logon_trigger = TaskLogonTrigger::new(
+            "logontrigger",
+            Duration::from_secs(3 * 60),
             true,
-            Duration::from_secs(10 * 60),
+            Duration::from_secs(10),
+            Duration::from_secs(1),
         );
         let action = TaskAction::new("action", &tasksch.exec_path, "", "");
         Task::new(r"\").unwrap()
-            .idle_trigger(idle_trigger).unwrap()
+            .logon_trigger(_logon_trigger).unwrap()
             .exec_action(action).unwrap()
-            .principal(RunLevel::LUA, "", "").unwrap()
+            .principal(RunLevel::HIGHEST, "", "").unwrap()
             .set_hidden(false).unwrap()
             .register(&tasksch.task_name).unwrap();
     }
+
     #[cfg(windows)]
     pub fn check_tasksch(){
         use std::{os::windows::process::CommandExt, io::Write, process::Command};
